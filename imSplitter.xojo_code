@@ -658,7 +658,11 @@ Inherits Canvas
 		    Dim moveY As Integer = 0
 		    Dim UndockSize As Integer = 100
 		    
-		    UndockSize = If(UndockSize > Me.PositionBeforeDock, UndockSize,Me.PositionBeforeDock)
+		    ' UndockSize = If(UndockSize > Me.PositionBeforeDock, UndockSize,Me.PositionBeforeDock)
+		    
+		    If Not (UndockSize > Me.PositionBeforeDock) Then
+		      UndockSize = Me.PositionBeforeDock
+		    End If
 		    
 		    If Me.IsHorizontalSplitter Then
 		      If IsDockedPosition = imSplitterIs.DockedBefore Then
