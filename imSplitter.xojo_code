@@ -4,22 +4,23 @@ Inherits Canvas
 	#tag CompatibilityFlags = TargetHasGUI
 	#tag Event
 		Sub DoubleClick(X As Integer, Y As Integer)
-		  If Me.IsDocked Then 
-		    If DoubleClickAction > 0 Then 
+		  If Me.IsDocked Then
+		    If DoubleClickAction > 0 Then
 		      Undock
 		    End If
+		    
+		  Else
+		    Select Case DoubleClickAction
+		    Case 0  // None
+		      
+		    Case 1  // DockBack
+		      Dock(True)
+		      
+		    Case 2  // DockAfter
+		      Dock(False)
+		      
+		    End Select
 		  End If
-		  
-		  Select Case DoubleClickAction
-		  Case 0  // None
-		    
-		  Case 1  // DockBack
-		    Dock(True)
-		    
-		  Case 2  // DockAfter
-		    Dock(False)
-		    
-		  End Select
 		  
 		  DoubleClick(X,Y)
 		End Sub
@@ -133,7 +134,7 @@ Inherits Canvas
 		      g.DrawLine(x1,y1+dist,x2,y2+dist)
 		      
 		      // vertical splitter
-		    Elseif Me.IsHorizontalSplitter=False And Me.Width >= 10 Then  
+		    Elseif Me.IsHorizontalSplitter=False And Me.Width >= 10 Then
 		      x1 = (Me.Width/2)
 		      x2 = x1
 		      y1 = (Me.Height/2)-(size/2)
@@ -368,7 +369,9 @@ Inherits Canvas
 		  If Me.IsHorizontalSplitter Then
 		    If before Then
 		      // calculate distance of splitter to top of window
-		      Me.PositionBeforeDock = - (Me.Top - Me.Window.Height)
+		      'Me.PositionBeforeDock = - (Me.Window.Height - Me.Top)
+		      Me.PositionBeforeDock = Me.Top
+		      
 		    Else
 		      // calculate distance of splitter to bottom of window
 		      Me.PositionBeforeDock = Me.Window.Height - Me.Top - Me.Height
@@ -430,18 +433,18 @@ Inherits Canvas
 
 	#tag Method, Flags = &h0
 		Sub MoveSplitter(MoveX As Integer = 0, MoveY As Integer = 0)
-		  // We can pass optional parameters MoveX and MoveY 
+		  // We can pass optional parameters MoveX and MoveY
 		  // to this method when we programaticaly want to move
 		  // a splitter to a different position.
 		  //
-		  // MoveX designates the number of pixels for the splitter to move 
+		  // MoveX designates the number of pixels for the splitter to move
 		  // to the right (positive) or to the left (negative value)
-		  // MoveY designates the number of pixels for the splitter to move 
-		  // downwards (positive) or upwards (negative value) 
+		  // MoveY designates the number of pixels for the splitter to move
+		  // downwards (positive) or upwards (negative value)
 		  //
-		  // If we call the method without any parameters, the move is calculated 
-		  // from the difference between the last mousedown coordinates 
-		  // (see MouseDown event handler) and the current mouse position 
+		  // If we call the method without any parameters, the move is calculated
+		  // from the difference between the last mousedown coordinates
+		  // (see MouseDown event handler) and the current mouse position
 		  // (System.MouseX, ..Y)
 		  // ================================================================
 		  
@@ -459,7 +462,9 @@ Inherits Canvas
 		  
 		  // The MouseDrag event fires contiuously and gets queued up.
 		  // Try exiting here if the mouse did not move
-		  If dx = 0 And dy = 0 Then Return
+		  If dx = 0 And dy = 0 Then 
+		    Return
+		  End If
 		  
 		  // Determine the width and Height of the Splitter's parent
 		  Dim ParentWidth, ParentHeight As Integer
@@ -471,8 +476,8 @@ Inherits Canvas
 		  Dim maxAfter As Integer
 		  
 		  // *****************************************************************
-		  // Note: IsHorizontalSplitter is set in Open event. There we decide 
-		  // from the initial dimensions of the splitter whether we treat it 
+		  // Note: IsHorizontalSplitter is set in Open event. There we decide
+		  // from the initial dimensions of the splitter whether we treat it
 		  // as a horizontal or vertical splitter.
 		  // *****************************************************************
 		  
@@ -513,7 +518,7 @@ Inherits Canvas
 		  // Check whether the splitter
 		  // is draged out of a docked position
 		  //   If yes, then set undocked
-		  If Me.mIsDocked Then 
+		  If Me.mIsDocked Then
 		    
 		    // Reset IsDocked property
 		    Me.mIsDocked = False
@@ -649,7 +654,7 @@ Inherits Canvas
 		    Dim before As Boolean = False
 		    Dim moveX As Integer = 0
 		    Dim moveY As Integer = 0
-		    Dim UndockSize As Integer = 150
+		    Dim UndockSize As Integer = 100
 		    
 		    UndockSize = If(UndockSize > Me.PositionBeforeDock, UndockSize,Me.PositionBeforeDock)
 		    
@@ -657,28 +662,27 @@ Inherits Canvas
 		      If IsDockedPosition = imSplitterIs.DockedBefore Then
 		        // Undock from top
 		        before = True
-		        moveY = UndockSize
+		        moveY = UndockSize-Me.Top
 		        
 		      Elseif IsDockedPosition = imSplitterIs.DockedAfter Then
 		        // Undock from bottom
 		        before = False
-		        moveY = -(UndockSize)
+		        moveY = -(UndockSize-(Me.Window.Height-Me.Top-Me.Height))
 		      End If
 		      
 		    Else // Is Vertical Splitter
 		      If IsDockedPosition = imSplitterIs.DockedBefore Then
 		        // Undock from Left
 		        before = True
-		        moveX = UndockSize
+		        moveX = UndockSize-Me.Left
 		        
 		      Elseif IsDockedPosition = imSplitterIs.DockedAfter Then
 		        // Undock from Right
 		        before = False
-		        moveX = -(UndockSize)
+		        moveX = -(UndockSize-(Me.Window.Width-Me.Left))
 		        
 		      End If  // IsDockedPosition = imSplitterIs.DockedBefore
 		    End If  // Me.IsHorizontalSplitter
-		    
 		    
 		    // Move Splitter
 		    MoveSplitter(moveX,moveY)
@@ -929,63 +933,59 @@ Inherits Canvas
 
 	#tag Property, Flags = &h0
 		#tag Note
-			Setting this property to true will make the WindowSplitter 
-			dock after the splitter (dock to bottom or right 
+			Setting this property to true will make the WindowSplitter
+			dock after the splitter (dock to bottom or right
 			depending on if its a horizontal or vertical splitter).
 			
 			Remarks
 			At what point it will dock can be defined with the DockAfterSize property.
-			
-			
 		#tag EndNote
 		DockAfter As Boolean = True
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
 		#tag Note
-			Setting this property will define where 
+			Setting this property will define where
 			docking bellow or after the splitter shall happen.
 			
 			Remarks
 			This property has effect only when the DockAfter property is set to true.
 			
 			Notes:
-			The MinAfterArea and MinBeforeArea properties define the boundaries 
-			from the edge of the parent window that the splitter should move. 
+			The MinAfterArea and MinBeforeArea properties define the boundaries
+			from the edge of the parent window that the splitter should move.
 			
-			The DockSize properties define where docking 
+			The DockSize properties define where docking
 			will occur from the edge if the movement area.
-			
 		#tag EndNote
 		DockAfterSize As Integer = 40
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
 		#tag Note
-			Setting this property to true will make the WindowSplitter 
-			dock before the splitter (dock to top or left depending 
+			Setting this property to true will make the WindowSplitter
+			dock before the splitter (dock to top or left depending
 			on whether it is a horizontal or vertical splitter).
 			
 			Remarks
-			At what point it will dock can be defined 
+			At what point it will dock can be defined
 			with the DockBeforeSize property.
-			
 		#tag EndNote
 		DockBefore As Boolean = True
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
 		#tag Note
-			Setting this property will define where docking 
+			Setting this property will define where docking
 			over or before the splitter shall happen
 			
 			This property has effect only when the DockBefore property is set to true.
 			
 			Notes:
-			The MinAfterArea and MinBeforeArea properties define the boundaries 
-			from the edge of the parent window that the splitter should move. 
+			The MinAfterArea and MinBeforeArea properties define the boundaries
+			from the edge of the parent window that the splitter should move.
 			
-			The DockSize properties define where docking will occur 
+			The DockSize properties define where docking will occur
 			from the edge if the movement area
 		#tag EndNote
 		DockBeforeSize As Integer = 40
@@ -1047,20 +1047,16 @@ Inherits Canvas
 
 	#tag Property, Flags = &h0
 		#tag Note
-			This property is used to specify the minimum size 
+			This property is used to specify the minimum size
 			of the view that comes after the WindowSplitter.
-			
-			
 		#tag EndNote
 		MinAfterArea As Integer = 0
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
 		#tag Note
-			This property is used to specify the minimum size 
+			This property is used to specify the minimum size
 			of the view that comes before the WindowSplitter.
-			
-			
 		#tag EndNote
 		MinBeforeArea As Integer = 0
 	#tag EndProperty
