@@ -141,6 +141,7 @@ Begin Window Window1
       DrawHandles     =   True
       Enabled         =   True
       EraseBackground =   False
+      HandlesColor    =   &c00000000
       HasBackColor    =   False
       Height          =   18
       HelpTag         =   ""
@@ -231,6 +232,7 @@ Begin Window Window1
       DrawHandles     =   False
       Enabled         =   True
       EraseBackground =   False
+      HandlesColor    =   &c00000000
       HasBackColor    =   False
       Height          =   154
       HelpTag         =   "Splitter on Window1"
@@ -299,6 +301,7 @@ Begin Window Window1
       DrawHandles     =   True
       Enabled         =   True
       EraseBackground =   False
+      HandlesColor    =   &c0080FF00
       HasBackColor    =   False
       Height          =   385
       HelpTag         =   ""

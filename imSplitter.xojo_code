@@ -118,6 +118,8 @@ Inherits Canvas
 		  End If
 		  
 		  If Me.DrawHandles Then
+		    g.ForeColor=Me.HandlesColor
+		    
 		    // Draw a circle as splitter handle
 		    Dim size As Integer = 20
 		    Dim dist As Integer = 2
@@ -462,7 +464,7 @@ Inherits Canvas
 		  
 		  // The MouseDrag event fires contiuously and gets queued up.
 		  // Try exiting here if the mouse did not move
-		  If dx = 0 And dy = 0 Then 
+		  If dx = 0 And dy = 0 Then
 		    Return
 		  End If
 		  
@@ -1005,6 +1007,10 @@ Inherits Canvas
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
+		HandlesColor As Color = &c00000000
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
 		HasBackColor As Boolean = False
 	#tag EndProperty
 
@@ -1197,6 +1203,13 @@ Inherits Canvas
 			Group="Behavior"
 			InitialValue="True"
 			Type="Boolean"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="HandlesColor"
+			Visible=true
+			Group="Appearance"
+			InitialValue="&c00000000"
+			Type="Color"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="HasBackColor"

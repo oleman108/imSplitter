@@ -87,6 +87,7 @@ Begin ContainerControl ContainerControl1
       DrawHandles     =   False
       Enabled         =   True
       EraseBackground =   False
+      HandlesColor    =   &c00000000
       HasBackColor    =   False
       Height          =   168
       HelpTag         =   "Splitter within a ContainerControl"
