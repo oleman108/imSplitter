@@ -113,7 +113,7 @@ Inherits Canvas
 	#tag Event
 		Sub Paint(g As Graphics, areas() As REALbasic.Rect)
 		  If Me.HasBackColor Then
-		    g.ForeColor=Me.BackColor
+		    g.ForeColor=Me.SplitterColor
 		    g.FillRect(0,0,Me.Width,Me.Height)
 		  End If
 		  
@@ -763,7 +763,7 @@ Inherits Canvas
 		    True = Coloring on
 		    False = Coloring off
 		
-		Backcolor As Color
+		SplitterColor As Color
 		
 		DockAfter As Boolean
 		    True = Docking is on, to right or bottom of Scrollbar
@@ -907,20 +907,6 @@ Inherits Canvas
 	#tag EndNote
 
 
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  return mBackColor
-			End Get
-		#tag EndGetter
-		#tag Setter
-			Set
-			  mBackColor = value
-			End Set
-		#tag EndSetter
-		BackColor As Color
-	#tag EndComputedProperty
-
 	#tag Property, Flags = &h21
 		Private CtrlArrayAfter() As Object
 	#tag EndProperty
@@ -1051,10 +1037,6 @@ Inherits Canvas
 		Private lastY As Integer
 	#tag EndProperty
 
-	#tag Property, Flags = &h21
-		Private mBackColor As Color = &cC0C0C0
-	#tag EndProperty
-
 	#tag Property, Flags = &h0
 		#tag Note
 			This property is used to specify the minimum size
@@ -1083,6 +1065,10 @@ Inherits Canvas
 		Private mPositionBeforeDock As Integer = 100
 	#tag EndProperty
 
+	#tag Property, Flags = &h21
+		Private mSplitterColor As Color = &cC0C0C0
+	#tag EndProperty
+
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
@@ -1095,6 +1081,20 @@ Inherits Canvas
 			End Set
 		#tag EndSetter
 		PositionBeforeDock As Integer
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  return mSplitterColor
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  mSplitterColor = value
+			End Set
+		#tag EndSetter
+		SplitterColor As Color
 	#tag EndComputedProperty
 
 
@@ -1124,13 +1124,6 @@ Inherits Canvas
 			Group="Appearance"
 			InitialValue="True"
 			Type="Boolean"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="BackColor"
-			Visible=true
-			Group="Appearance"
-			InitialValue="&c000000"
-			Type="Color"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Backdrop"
@@ -1307,6 +1300,13 @@ Inherits Canvas
 			Name="PositionBeforeDock"
 			Group="Behavior"
 			Type="Integer"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="SplitterColor"
+			Visible=true
+			Group="Appearance"
+			InitialValue="&c000000"
+			Type="Color"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"

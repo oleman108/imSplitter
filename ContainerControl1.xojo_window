@@ -76,7 +76,6 @@ Begin ContainerControl ContainerControl1
       AcceptFocus     =   False
       AcceptTabs      =   False
       AutoDeactivate  =   True
-      BackColor       =   &c00FFFF00
       Backdrop        =   0
       DockAfter       =   True
       DockAfterSize   =   40
@@ -104,6 +103,7 @@ Begin ContainerControl ContainerControl1
       MinBeforeArea   =   0
       PositionBeforeDock=   0
       Scope           =   0
+      SplitterColor   =   &c00000000
       TabIndex        =   1
       TabPanelIndex   =   0
       TabStop         =   True
