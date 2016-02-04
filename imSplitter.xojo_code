@@ -44,7 +44,7 @@ Inherits Canvas
 	#tag Event
 		Sub MouseDrag(X As Integer, Y As Integer)
 		  MoveSplitter
-		  MouseDrag(X,Y)
+		  'MouseDrag(X,Y)
 		End Sub
 	#tag EndEvent
 
@@ -149,7 +149,7 @@ Inherits Canvas
 		    End If
 		  End If
 		  
-		  Paint(g)
+		  'Paint(g)
 		End Sub
 	#tag EndEvent
 
@@ -1234,6 +1234,7 @@ Inherits Canvas
 			Visible=true
 			Group="ID"
 			Type="Integer"
+			EditorType="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="InitialParent"
@@ -1245,6 +1246,17 @@ Inherits Canvas
 			Group="Behavior"
 			InitialValue="False"
 			Type="Boolean"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="IsDockedPosition"
+			Group="Behavior"
+			Type="imSplitterIs"
+			EditorType="Enum"
+			#tag EnumValues
+				"0 - DockedBefore"
+				"1 - DockedAfter"
+				"2 - UnDocked"
+			#tag EndEnumValues
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"
@@ -1295,6 +1307,7 @@ Inherits Canvas
 			Visible=true
 			Group="ID"
 			Type="String"
+			EditorType="String"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="PositionBeforeDock"
@@ -1313,6 +1326,7 @@ Inherits Canvas
 			Visible=true
 			Group="ID"
 			Type="String"
+			EditorType="String"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="TabIndex"
